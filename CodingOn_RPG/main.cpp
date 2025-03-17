@@ -1,106 +1,53 @@
-﻿#include "Character.h"
-#include "Warrior.h"
-#include "Mage.h"
-#include "Rouge.h"
+﻿#include "BattleManager.h"
+
+unique_ptr<Character> chooseCharacter(const string& prompt) { // 캐릭터 선택 옵션
+	cout << prompt << " 캐릭터를 선택해주세요" << endl;
+	cout << "----------------" << endl;
+	cout << "1. 전사" << endl
+		<< "2. 마법사" << endl
+		<< "3. 도적" << endl;
+	
+	int option;
+	cin >> option;
+	if(option == 1) return make_unique<Warrior>("전사", 1, 100, 15);
+	if(option == 2) return make_unique<Mage>("마법사", 1, 80, 18, 100);
+	if(option == 3) return make_unique<Rouge>("도적", 1, 90, 12);
+}
 
 int main()
 {
-	Character char1("전사", 1, 100, 10);
-	char1.showStatus();
+	shared_ptr<Character> playerChar;
+	shared_ptr<Character> cpuChar;
+	string input;
+	bool loopBattle = true;
 
-	Warrior char2("전사", 1, 100, 10);
-	char2.showStatus();
-	char2.takeDamage(10);
-	char2.showStatus();
-	if (char2.isAlive() == true) {
-		char2.resetHealth();
+	cout << "RPG 전투 시스템" << endl;
+	playerChar = chooseCharacter("나의");
+	playerChar->showStatus();
+	cpuChar = chooseCharacter("상대");
+	cpuChar->showStatus();
+
+	while (loopBattle == true) { // 플레이어가 죽거나 전투 멈추지 않는 이상 무한루프
+		startBattle(playerChar, cpuChar);
+
+		if (playerChar->isAlive() == true) { // 플레이어가 승리하면
+			cout << playerChar->getName() << "(이)가 승리했습니다!" << endl;
+			cout << "승리하였습니다! 계속 전투를 진행하시겠습니까? (y/n): ";
+			cin >> input;
+
+			if (input == "y") { // 전투 멈추는가
+				playerChar->resetHealth(); 
+				cpuChar = chooseCharacter("상대");
+				cpuChar->showStatus();
+			}
+			else if (input == "n") loopBattle = false;
+			else cout << endl << "다시 입력해 주세요!" << endl;
+		}
+		else { // cpu 승리
+			cout << cpuChar->getName() << "(이)가 승리했습니다!" << endl;
+			loopBattle = false;
+		}
 	}
-	char2.showStatus();
 
-	cout << "공격 진행" << endl;
-	char2.attack(char1);
-	char1.showStatus();
-
-	cout << "특수 공격 진행" << endl;
-	char2.specialAttack(char1);
-	char1.showStatus();
-	char2.showStatus();
-
-	Mage char3("마법사", 1, 80, 20, 100);
-	char3.showStatus();
-	char3.takeDamage(10);
-	char3.showStatus();
-
-	cout << "공격 진행" << endl;
-	char3.attack(char1);
-	char1.showStatus();
-
-	cout << "특수 공격 진행" << endl;
-	char3.specialAttack(char1);
-	char1.showStatus();
-	char3.showStatus();
-	cout << "특수 공격 진행" << endl;
-	char3.specialAttack(char1);
-	char1.showStatus();
-	char3.showStatus();
-	cout << "특수 공격 진행" << endl;
-	char3.specialAttack(char1);
-	char1.showStatus();
-	char3.showStatus();
-	cout << "특수 공격 진행" << endl;
-	char3.specialAttack(char1);
-	char1.showStatus();
-	char3.showStatus();
-
-
-	Rouge char4("도적", 1, 90, 15);
-	char4.showStatus();
-	char4.takeDamage(10);
-	char4.showStatus();
-
-	cout << "공격 진행" << endl;
-	char4.attack(char1);
-	char1.showStatus();
-
-	cout << "특수 공격 진행" << endl;
-	char4.specialAttack(char1);
-	char1.showStatus();
-	cout << "특수 공격 진행" << endl;
-	char4.specialAttack(char1);
-	char1.showStatus();
-	cout << "특수 공격 진행" << endl;
-	char4.specialAttack(char1);
-	char1.showStatus();
-	cout << "특수 공격 진행" << endl;
-	char4.specialAttack(char1);
-	char1.showStatus();
-	cout << "특수 공격 진행" << endl;
-	char4.specialAttack(char1);
-	char1.showStatus();
-	cout << "특수 공격 진행" << endl;
-	char4.specialAttack(char1);
-	char1.showStatus();
+	return 0;
 }
-
-
-//Chatbot* chatbot = nullptr;
-//string message = "";
-//string input = "";
-//int option;
-//bool accessService = true;
-
-//chatbot = new CustomerSupportBot(); // 고객응대
-//cout << "문의가 필요한 사항 입력: ";
-//cin >> message;
-//chatbot->respond(message);
-//delete chatbot;
-
-//chatbot = new WeatherBot(); // 기상관측
-//cout << "정보제공이 필요한 날짜 정보 입력: ";
-//cin >> message;
-//chatbot->respond(message);
-//delete chatbot;
-
-//shared_ptr<Child> child = make_shared<Child>(); // shared pointer 정의. Child를 가리키는 포인터 만들기
-//shared_ptr<Parent> parent = child; // 업케스팅. 자식 포인터로 부모 포인터 만들기
-//shared_ptr<Child> child2 = dynamic_pointer_cast<Child>(parent); // 다운캐스팅. 부모 포인터로 자녀 포인터 만들기
