@@ -12,5 +12,9 @@ protected:
 public:
 	Character(string name, int level, int health, int attackPower);
 
+	void takeDamage(int damage);
+	bool isAlive();
 	void showStatus();
+	void resetHealth();
+
 };
