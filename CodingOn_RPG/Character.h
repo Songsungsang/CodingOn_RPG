@@ -12,9 +12,13 @@ protected:
 public:
 	Character(string name, int level, int health, int attackPower);
 
+	virtual void attack(Character& target);
+	virtual void specialAttack(Character& target);
+
 	void takeDamage(int damage);
 	bool isAlive();
 	void showStatus();
-	void resetHealth();
+	
+	virtual void resetHealth();
 
 };

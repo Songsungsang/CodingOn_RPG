@@ -7,6 +7,11 @@ Character::Character(string name, int level, int health, int attackPower) {
 	this->attackPower = attackPower;
 }
 
+void Character::attack(Character& target) {
+}
+void Character::specialAttack(Character& target){
+}
+
 void Character::takeDamage(int damage) {
 	this->health -= damage;
 }
@@ -24,7 +29,4 @@ void Character::showStatus() {
 }
 
 void Character::resetHealth() {
-	if (this->name == "전사") this->health = 100;
-	if (this->name == "마법사") this->health = 80;
-	if (this->name == "도적") this->health = 90;
 }

@@ -14,4 +14,13 @@ int main()
 		char2.resetHealth();
 	}
 	char2.showStatus();
+
+	cout << "공격 진행" << endl;
+	char2.attack(char1);
+	char1.showStatus();
+
+	cout << "특수 공격 진행" << endl;
+	char2.specialAttack(char1);
+	char1.showStatus();
+	char2.showStatus();
 }
